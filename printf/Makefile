@@ -1,10 +1,10 @@
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror -I./includes/
+CFLAGS = -Wall -Wextra -Werror -I./includes/ -g
 
 RM = rm -rf
 
-SRCS = ft_printf.c srcs/print_p.c srcs/print_u.c srcs/print_x.c srcs/print_c.c srcs/print_d.c srcs/print_s.c srcs/ft_itoa_hex.c
+SRCS = ft_printf.c srcs/print_p.c srcs/print_u.c srcs/print_x.c srcs/print_c.c srcs/print_d.c srcs/print_s.c srcs/ft_itoa_hex.c srcs/utils.c
 
 OBJS = $(SRCS:.c=.o)
 

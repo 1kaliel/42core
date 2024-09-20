@@ -16,20 +16,42 @@ char	*to_hex(void *data, int up)
 {
 	unsigned int	num;
 	char			*buffer;
+	char			*result;
 
 	num = *(unsigned int *)data;
 	buffer = malloc(17);
 	if (!buffer)
 		return (NULL);
-	return (ft_itoa_hex(num, up, buffer));
+	result = (ft_itoa_hex(num, up, buffer));
+	return (result);
 }
 
 char	*print_x(void *data)
 {
-	return (to_hex(data, 0));
+	char *hex_str;
+	char *result;
+
+	hex_str = to_hex(data, 0);
+	if (hex_str)
+	{
+		result = ft_strdup(hex_str);
+		//free(hex_str);
+		return (result);
+	}
+	return (NULL);
 }
 
 char	*print_upx(void *data)
 {
-	return (to_hex(data, 1));
+	char *hex_str;
+	char *result;
+
+	hex_str = to_hex(data, 1);
+	if (hex_str)
+	{
+		result = ft_strdup(hex_str);
+		//free(hex_str);
+		return (result);
+	}
+	return (NULL);
 }

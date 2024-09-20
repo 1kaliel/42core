@@ -39,14 +39,24 @@ void	*all_data(va_list args, char type)
 	return (data);
 }
 
-void	handle_result(char *result, char type)
+void	handle_result(char *result, char type, int *counter)
 {
+	if (type == 'p')
+	{
+		write(1, "0x", 2);
+		*counter += 2;
+	}
 	write(1, result, ft_strlen(result));
-	if (type != 'p' && type != 'u' && type != 'x' && type != 'X')
-		free(result);
+	*counter += ft_strlen(result);
+	// if (type != 'p' && type != 'u')
+	// 	free(result);
+	if (type == 'x' || type == 'X' || type == 'i' || type == 's' || type == 'c')
+    {
+        free(result);  // Ensure the result is freed after use only if it was dynamically allocated
+    }
 }
 
-void	get_arg(va_list args, manipulate_ft ft, char type)
+void	get_arg(va_list args, manipulate_ft ft, char type, int *counter)
 {
 	void	*data;
 	char	*result;
@@ -55,76 +65,77 @@ void	get_arg(va_list args, manipulate_ft ft, char type)
 	if (!data)
 		return ;
 	result = ft(data);
-	handle_result(result, type);
+	handle_result(result, type, counter);
 	if (type == 'i' || type == 'c' || type == 'u' || type == 'x' || type == 'X')
 		free(data);
 }
 
-void	handle_format(char format, va_list list)
+void	handle_format(char format, va_list list, int *counter)
 {
-	if (format == 'd')
-		get_arg(list, print_d, 'i');
+	if (format == 'd' || format == 'i')
+		get_arg(list, print_d, 'i', counter);
 	else if (format == 's')
-		get_arg(list, print_s, 's');
+		get_arg(list, print_s, 's', counter);
 	else if (format == 'c')
-		get_arg(list, print_c, 'c');
+		get_arg(list, print_c, 'c', counter);
 	else if (format == 'p')
-		get_arg(list, print_p, 'p');
+		get_arg(list, print_p, 'p', counter);
 	else if (format == 'u')
-		get_arg(list, print_u, 'u');
+		get_arg(list, print_u, 'u', counter);
 	else if (format == 'x')
-		get_arg(list, print_x, 'x');
+		get_arg(list, print_x, 'x', counter);
 	else if (format == 'X')
-		get_arg(list, print_upx, 'X');
+		get_arg(list, print_upx, 'X', counter);
 }
 
 int	ft_printf(const char *bau, ...)
 {
 	va_list	list;
 	int		i;
+	int counter;
 
+	counter = 0;
 	va_start (list, bau);
 	i = 0;
 	while (bau[i])
 	{
 		if (bau[i] != '%')
-		{
-			write(1, &bau[i], 1);
-			i++;
-		}
+			write_char(bau[i++], &counter);
 		else if (bau[i] == '%' && bau[i + 1] == '%')
 		{
-			write(1, "%", 1);
+			print_percent(&counter);
+			counter++;
 			i += 2;
 		}
 		else
 		{
-			handle_format(bau[i + 1], list);
+			handle_format(bau[i + 1], list, &counter);
 			i += 2;
 		}
 	}
 	va_end(list);
-	return (0);
+	return (counter);
 }
 #include <stdio.h>
 
 int main()
 {
-	char name[] = "Kaliel";
+	char *name = NULL;
 	int grade = 10;
 	char g = 'g';
-	unsigned int u = 4294967295;
+	void	*p = NULL;
+	unsigned int u = -1;
 	ft_printf("String, interger and character -> ");
-	ft_printf("Hello \x1b[32m%s\x1b[m, you got an \x1b[32m%d\x1b[m in your test! \x1b[32m%c%c\x1b[m\n", name, grade, g, g);
-	ft_printf("this is print_p: \x1b[32m%p\x1b[m\n", name);
+	ft_printf("Hello \x1b[32m%s\x1b[m, you got an \x1b[32m%d\x1b[m in your test! \x1b[32m%c%c\x1b[m\n", name, grade, 126 + 12, g);
+	ft_printf("this is print_p: \x1b[32m%p\x1b[m\n", p);
 	ft_printf("this is print_u: \x1b[32m%u\x1b[m\n", u);
 	ft_printf("this is print_x: \x1b[32m%x\x1b[m\n", u);
 	ft_printf("this is print_upx: \x1b[32m%X\x1b[m\n", u);
 	ft_printf("this a percent sign: \x1b[32m%%\x1b[m\n");
 
 	printf("String, interger and character -> ");
-	printf("Hello \x1b[32m%s\x1b[m, you got an \x1b[32m%d\x1b[m in your test! \x1b[32m%c%c\x1b[m\n", name, grade, g, g);
-	printf("this is print_p: \x1b[32m%p\x1b[m\n", name);
+	printf("Hello \x1b[32m%s\x1b[m, you got an \x1b[32m%d\x1b[m in your test! \x1b[32m%c%c\x1b[m\n", name, grade, 126 + 12, g);
+	printf("this is print_p: \x1b[32m%p\x1b[m\n", p);
 	printf("this is print_u: \x1b[32m%u\x1b[m\n", u);
 	printf("this is print_x: \x1b[32m%x\x1b[m\n", u);
 	printf("this is print_upx: \x1b[32m%X\x1b[m\n", u);

@@ -26,6 +26,9 @@ char	*print_p(void *data);
 char	*print_u(void *data);
 char	*print_x(void *data);
 char	*print_upx(void *data);
+void 	write_char(char c, int *counter);
+void 	print_percent(int *counter);
+
 
 //utils
 char	*ft_itoa_hex(unsigned long num, int up, char *buffer);
