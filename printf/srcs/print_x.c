@@ -17,13 +17,16 @@ char	*to_hex(void *data, int up)
 	unsigned int	num;
 	char			*buffer;
 	char			*result;
+	char			*dup;
 
 	num = *(unsigned int *)data;
 	buffer = malloc(17);
 	if (!buffer)
 		return (NULL);
 	result = (ft_itoa_hex(num, up, buffer));
-	return (result);
+	dup = ft_strdup(result);
+	free(buffer);
+	return (dup);
 }
 
 char	*print_x(void *data)
@@ -35,7 +38,7 @@ char	*print_x(void *data)
 	if (hex_str)
 	{
 		result = ft_strdup(hex_str);
-		//free(hex_str);
+		free(hex_str);
 		return (result);
 	}
 	return (NULL);
@@ -50,7 +53,7 @@ char	*print_upx(void *data)
 	if (hex_str)
 	{
 		result = ft_strdup(hex_str);
-		//free(hex_str);
+		free(hex_str);
 		return (result);
 	}
 	return (NULL);
