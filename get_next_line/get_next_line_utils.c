@@ -27,30 +27,44 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	i = 0;
 	x = 0;
 	ns = (char *)malloc(size + 1);
-	if (ns == NULL)
+	if (!ns)
 		return (NULL);
-	while (s1[i] != '\0')
+	while (s1 && s1[i] != '\0')
 	{
 		ns[i] = s1[i];
 		i++;
 	}
-	while (s2[x] != '\0')
+	while (s2 && s2[x] != '\0')
 		ns[i++] = s2[x++];
 	return (ns[i] = '\0', ns);
 }
-char	*ft_findnew(char *str)
+char	*ft_strchr(const char *s, int c)
 {
-	if (!str)
-		return (NULL);
-	while (*str)
+	while (*s)
 	{
-		if (*str == '\n')
-			return (str);
-		str++;
+		if (*s == (char)c)
+			return ((char *)s);
+		s++;
 	}
 	return (NULL);
 }
+char	*ft_strncpy(char *dest, char *src, unsigned int n)
+{
+	unsigned int	i;
 
+	i = 0;
+	while (i < n && src[i] != '\0')
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	while (i < n)
+	{
+		dest[i] = '\0';
+		i++;
+	}
+	return (dest);
+}
 char	*ft_strdup(const char *s, size_t nb)
 {
 	size_t	len;
@@ -62,7 +76,7 @@ char	*ft_strdup(const char *s, size_t nb)
 	if (nb < len)
 		len = nb;
 	dup = (char *)malloc(len + 1);
-	if (dup == NULL)
+	if (!dup)
 		return (NULL);
 	while (i < len)
 	{
